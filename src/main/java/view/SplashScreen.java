@@ -22,6 +22,12 @@ public class SplashScreen extends javax.swing.JFrame {
         initColors();
         initComponents();
         tfInfo.setFont(nasalization);
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+            }
+        
+        }).start();
     }
 
     /**
