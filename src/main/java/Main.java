@@ -9,25 +9,25 @@ public class Main {
 
     public Main(String[] args) {
         if (new File(ConfigFileFactory.FILE_PATH).exists()) {
-            System.out.println("[ESYS-INFO] config.bin encontrado. Iniciando Splash...");
+            System.out.println("[XLIV-INFO] config.bin encontrado. Iniciando Splash...");
             try {
                 UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             } catch (Exception ex) {
             }
-            System.out.println("[ESYS-INFO] Carregando Interface Em Modo Metal");
+            System.out.println("[XLIV-INFO] Carregando Interface Em Modo Metal");
             new SplashScreen().setVisible(true);
-            System.out.println("[ESYS-INFO] Splash Carregada");
+            System.out.println("[XLIV-INFO] Splash Carregada");
 
         } else {
-            System.out.println("[ESYS-INFO] config.bin não encontrado. Carregando First Start...");
+            System.out.println("[XLIV-INFO] config.bin não encontrado. Carregando First Start...");
             try {
                 UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-                System.out.println("[ESYS-INFO] Carregando Interface Em Modo Nimbus");
+                System.out.println("[XLIV-INFO] Carregando Interface Em Modo Nimbus");
             } catch (Exception ex) {
-                System.out.println("[ESYS-INFO] Carregando Interface Em Modo Metal");
+                System.out.println("[XLIV-INFO] Carregando Interface Em Modo Metal");
             }
             new FirstStartConfig().setVisible(true);
-            System.out.println("[ESYS-INFO] Interface Carregada");
+            System.out.println("[XLIV-INFO] Interface Carregada");
         }
     }
 
@@ -35,8 +35,8 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("[ESYS-INFO] Aguarde... Iniciando Sistema");
-        System.out.println("[ESYS-INFO] Procurando Por config.bin...");
+        System.out.println("[XLIV-INFO] Aguarde... Iniciando Sistema");
+        System.out.println("[XLIV-INFO] Procurando Por config.bin...");
         new Main(args);
     }
 

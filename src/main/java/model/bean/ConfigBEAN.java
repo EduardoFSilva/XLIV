@@ -14,7 +14,8 @@ public class ConfigBEAN implements java.io.Serializable{
     private String[] dbData;
     private boolean options[];
     private Color colors[];
-    public static final float VERSION = 1.0f;
+    private float version;
+    public static final float VERSION = 1.1f;
     public static final Color[] DARK_MODE_PALETTE = new Color[]{new Color(0xFFFFFF),new Color(0x000000),new Color(0,0,102),new Color(51,51,51)};
     public static final Color[] LIGHT_MODE_PALETTE = new Color[]{new Color(0x000000),new Color(0xFFFFFF),new Color(0,0,200),new Color(255,255,255)};
 
@@ -26,7 +27,7 @@ public class ConfigBEAN implements java.io.Serializable{
      * @return Objeto Bean
      */
     public ConfigBEAN initObject(){
-        
+    this.version = VERSION;
     this.databaseType = "mysql";
     this.databaseDriver="com.mysql.jdbc.Driver";
     this.dbData = new String[]{"root","root","127.0.0.1","3307"};
@@ -74,6 +75,10 @@ public class ConfigBEAN implements java.io.Serializable{
 
     public void setColors(Color[] colors) {
         this.colors = colors;
+    }
+
+    public float getVersion() {
+        return version;
     }
     
 }

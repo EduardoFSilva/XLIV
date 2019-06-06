@@ -9,8 +9,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import model.bean.ConfigBEAN;
 import util.ConfigFileFactory;
+import util.ConnectionVerifyer;
+import util.InitHelper;
 
 public class SplashScreen extends javax.swing.JFrame {
 
@@ -22,12 +29,32 @@ public class SplashScreen extends javax.swing.JFrame {
         initColors();
         initComponents();
         tfInfo.setFont(nasalization);
-        new Thread(new Runnable(){
+        new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    if (etapaStorage()) {
+                        if (etapaBinFile()) {
+                            if (etapaNetwork()) {
+                                if (etapaGithub()) {
+                                    etapaIndexFile();
+                                }
+                            }
+                            if (etapaDatabase()) {
+                                changeIcon("database", "success", lbDatabase);
+                                verbose("Carregamento Concluido. Iniciando Login Middleware", false);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    ex.printStackTrace(pw);
+                    JOptionPane.showMessageDialog(null, sw.toString());
+                }
             }
-        
-        }).start();
+
+        }, "Thread Splash").start();
     }
 
     /**
@@ -45,7 +72,7 @@ public class SplashScreen extends javax.swing.JFrame {
         lbNetwork = new javax.swing.JLabel();
         lbGithub = new javax.swing.JLabel();
         lbLocalStorage = new javax.swing.JLabel();
-        lbBinFile2 = new javax.swing.JLabel();
+        lbBinFile = new javax.swing.JLabel();
         lbDatabase = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -66,7 +93,7 @@ public class SplashScreen extends javax.swing.JFrame {
 
         lbLocalStorage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/32x/local-storage-dark.png"))); // NOI18N
 
-        lbBinFile2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/32x/binary-file-dark.png"))); // NOI18N
+        lbBinFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/32x/binary-file-dark.png"))); // NOI18N
 
         lbDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/32x/database-dark.png"))); // NOI18N
 
@@ -75,10 +102,10 @@ public class SplashScreen extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(164, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbLocalStorage)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbBinFile2)
+                .addComponent(lbBinFile)
                 .addGap(6, 6, 6)
                 .addComponent(lbNetwork)
                 .addGap(6, 6, 6)
@@ -87,7 +114,7 @@ public class SplashScreen extends javax.swing.JFrame {
                 .addComponent(lbIndexFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbDatabase)
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -95,7 +122,7 @@ public class SplashScreen extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbDatabase)
-                    .addComponent(lbBinFile2)
+                    .addComponent(lbBinFile)
                     .addComponent(lbIndexFile)
                     .addComponent(lbLocalStorage)
                     .addComponent(lbGithub)
@@ -121,27 +148,24 @@ public class SplashScreen extends javax.swing.JFrame {
             pnBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(pnBgLayout.createSequentialGroup()
-                .addGroup(pnBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnBgLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tfInfo))
-                    .addGroup(pnBgLayout.createSequentialGroup()
-                        .addGroup(pnBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnBgLayout.createSequentialGroup()
-                                .addGap(197, 197, 197)
-                                .addComponent(jLabel1))
-                            .addGroup(pnBgLayout.createSequentialGroup()
-                                .addGap(100, 100, 100)
-                                .addComponent(jLabel2)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(tfInfo)
                 .addContainerGap())
+            .addGroup(pnBgLayout.createSequentialGroup()
+                .addGap(154, 154, 154)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnBgLayout.createSequentialGroup()
+                .addContainerGap(59, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(51, 51, 51))
         );
         pnBgLayout.setVerticalGroup(
             pnBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnBgLayout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
+                .addContainerGap(18, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -203,7 +227,7 @@ public class SplashScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lbBinFile2;
+    private javax.swing.JLabel lbBinFile;
     private javax.swing.JLabel lbDatabase;
     private javax.swing.JLabel lbGithub;
     private javax.swing.JLabel lbIndexFile;
@@ -229,11 +253,236 @@ public class SplashScreen extends javax.swing.JFrame {
 
     private void initFonts() {
         try {
-            nasalization = Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getResource("/fonts/nasalization-rg.ttf").toURI())).deriveFont(16f);
+            nasalization = Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getResource("/fonts/nasalization-rg.ttf").toURI())).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(nasalization);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void changeIcon(String family, String state, JLabel label) {
+        ImageIcon ii = new ImageIcon(getClass().getResource("/icons/32x/" + family + "-" + state + ".png"));
+        label.setIcon(ii);
+    }
+
+    private boolean etapaStorage() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("local-storage", "running", lbLocalStorage);
+        verbose("Verificando Permissões De Escrita", false);
+        if (InitHelper.isWritable()) {
+            Thread.sleep(200);
+            verbose("Permissão De Escrita Liberada", false);
+            Thread.sleep(200);
+            verbose("Verificando Presença De Pastas", false);
+            Thread.sleep(500);
+            if (!InitHelper.hasDataFolder()) {
+                verbose("Pasta Não Existe. Criando...", false);
+                Thread.sleep(200);
+                if (InitHelper.createDataFolder()) {
+                    verbose("Pasta Criada Com Sucesso.", false);
+                    Thread.sleep(500);
+                    verbose("Etapa De Storage Finalizada Com Sucesso.", false);
+                    changeIcon("local-storage", "success", lbLocalStorage);
+                    return true;
+                } else {
+                    verbose("Falha Ao Criar Pasta", true);
+                    Thread.sleep(500);
+                    verbose("Etapa De Storage Finalizada Com Errors.", true);
+                    changeIcon("local-storage", "error", lbLocalStorage);
+                    getToolkit().beep();
+                    return false;
+                }
+            } else {
+                verbose("Pasta Encontrada.", false);
+                Thread.sleep(200);
+                verbose("Etapa De Storage Finalizada Com Sucesso.", false);
+                changeIcon("local-storage", "success", lbLocalStorage);
+                return true;
+            }
+        } else {
+            verbose("Permissão De Escrita Foi Negada.", true);
+            changeIcon("local-storage", "error", lbLocalStorage);
+            getToolkit().beep();
+            return false;
+        }
+    }
+
+    private boolean etapaBinFile() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("binary-file", "running", lbBinFile);
+        verbose("Verificando Binário De Configurações", false);
+        Thread.sleep(500);
+        if (InitHelper.binFileExists()) {
+            float f = InitHelper.fileVersionIsTheSame();
+            if (f == 0) {
+                verbose("Arquivo Binário Está Atualizado", false);
+                Thread.sleep(500);
+                changeIcon("binary-file", "success", lbBinFile);
+                Thread.sleep(500);
+                verbose("Etapa De Arquivo Binário Finalizada Com Sucesso.", false);
+                return true;
+            } else {
+                verbose("Arquivo Binário é Diferente. Abortando Inicialização...", true);
+                int i = JOptionPane.showConfirmDialog(null, "Deseja Atualizar O Arquivo De Configurações ? Dados Antigos Serão Apagados", "Nova versão disponivel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                switch (i) {
+                    case JOptionPane.YES_OPTION:
+                        verbose("Migrando...", false);
+                        Thread.sleep(1000);
+                        InitHelper.deleteBinFile();
+                        new FirstStartConfig().setVisible(true);
+                        dispose();
+                        break;
+                    case JOptionPane.NO_OPTION:
+                    default:
+                        verbose("Pulando Migração De Arquivo Binário", true);
+                        Thread.sleep(500);
+                        break;
+                }
+                Thread.sleep(1000);
+                return true;
+            }
+        } else {
+            verbose("Arquivo Binário De Configuração Não Encontrado", true);
+            changeIcon("binary-file", "error", lbBinFile);
+            getToolkit().beep();
+            Thread.sleep(500);
+            verbose("Etapa De Arquivo Binário Finalizada Com Errors.", true);
+            return false;
+        }
+    }
+
+    private boolean etapaNetwork() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("network", "running", lbNetwork);
+        verbose("Verificando Conexão A Internet", false);
+        if (new ConnectionVerifyer().isConnected()) {
+            Thread.sleep(500);
+            verbose("Rede Conectada", false);
+            changeIcon("network", "success", lbNetwork);
+            Thread.sleep(500);
+            verbose("Etapa De Rede Finalizada Com Sucesso.", false);
+            return true;
+        } else {
+            Thread.sleep(500);
+            verbose("Rede Desconectada", true);
+            changeIcon("network", "error", lbNetwork);
+            Thread.sleep(500);
+            verbose("Etapa De Rede Finalizada Com Sucesso.", true);
+            Thread.sleep(1000);
+            verbose("Pulando Verificação De Repositório Github", true);
+            changeIcon("github", "error", lbGithub);
+            verbose("Pulando Verificação De Arquivo De Indice", true);
+            changeIcon("index-file", "error", lbIndexFile);
+            return false;
+        }
+    }
+
+    private boolean etapaGithub() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("github", "running", lbGithub);
+        verbose("Verificando Conexão Ao Repositório Git", false);
+        if (new ConnectionVerifyer().isRearchble("https://github.com/EduardoFSilva/XLIV")) {
+            Thread.sleep(500);
+            verbose("Conexão Ao Repositório Bem Sucedida", false);
+            changeIcon("github", "success", lbGithub);
+            Thread.sleep(500);
+            verbose("Etapa De Repositório Github Finalizada Com Sucesso.", false);
+            return true;
+        } else {
+            Thread.sleep(500);
+            verbose("Falha Ao Conectar Ao Repositório", true);
+            changeIcon("github", "error", lbGithub);
+            getToolkit().beep();
+            Thread.sleep(500);
+            verbose("Etapa De Repositório Github Finalizada Com Erros.", true);
+            return false;
+        }
+    }
+
+    private boolean etapaIndexFile() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("index-file", "running", lbIndexFile);
+        verbose("Verificando Existencia De Arquivo De Indice", false);
+        if (new ConnectionVerifyer().isRearchble("https://raw.githubusercontent.com/EduardoFSilva/XLIV/master/files/indice")) {
+            Thread.sleep(500);
+            verbose("Arquivo De Indice Encontrado", false);
+            changeIcon("index-file", "success", lbIndexFile);
+            Thread.sleep(500);
+            verbose("Etapa De Arquivo De Indice Finalizada Com Sucesso.", false);
+            return true;
+        } else {
+            Thread.sleep(500);
+            verbose("Arquivo De Indice Não Encontrado", true);
+            changeIcon("index-file", "error", lbIndexFile);
+            getToolkit().beep();
+            Thread.sleep(500);
+            verbose("Etapa De Arquivo De Indice Finalizada Com Erros.", true);
+            return false;
+        }
+    }
+
+    private boolean etapaDatabase() throws Exception {
+        Thread.sleep(1000);
+        changeIcon("database", "running", lbDatabase);
+        if (InitHelper.databaseExists()) {
+            if (InitHelper.getDatabaseVersion() < InitHelper.DATABASE_VERSION) {
+                verbose("Database Desatualizada", true);
+                int i = JOptionPane.showConfirmDialog(null, "Deseja Atualizar A Database ? Dados Antigos Serão Apagados", "Nova versão disponivel", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                switch (i) {
+                    case JOptionPane.YES_OPTION:
+                        verbose("Migrando...", false);
+                        InitHelper.dropDatabase();
+                        try {
+                            InitHelper.generateDatabase();
+                        } catch (Exception ex) {
+                            changeIcon("database", "error", lbDatabase);
+                            verbose("Falha Ao Gerar Database", true);
+                            return false;
+                        }
+                        verbose("Migração Concluida.", false);
+                        changeIcon("database", "success", lbDatabase);
+                        Thread.sleep(500);
+                        break;
+                    case JOptionPane.NO_OPTION:
+                    default:
+                        verbose("Pulando Migração De Database", true);
+                        changeIcon("database", "success", lbDatabase);
+                        Thread.sleep(500);
+                        break;
+                }
+            }
+            return true;
+        } else {
+            verbose("Database Não Encontrada. Criando...", false);
+            Thread.sleep(200);
+            try {
+                InitHelper.generateDatabase();
+            } catch (Exception ex) {
+                changeIcon("database", "error", lbDatabase);
+                verbose("Falha Ao Gerar Database", true);
+                return false;
+            }
+            verbose("Database Criada", false);
+            Thread.sleep(500);
+            verbose("Etapa De Database Com Sucesso.", false);
+            Thread.sleep(500);
+            changeIcon("database", "success", lbDatabase);
+            return true;
+        }
+    }
+
+    private void verbose(String msg, boolean isError) {
+        Color c1 = new Color(70, 70, 255);
+        Color c2 = new Color(255, 70, 70);
+        if (isError) {
+            System.err.println("[XLIV-ERROR] " + msg);
+            tfInfo.setForeground(c2);
+            tfInfo.setText(msg);
+        } else {
+            System.err.println("[XLIV-INFO] " + msg);
+            tfInfo.setForeground(c1);
+            tfInfo.setText(msg);
         }
     }
 }

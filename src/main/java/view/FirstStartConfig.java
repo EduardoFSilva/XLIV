@@ -893,7 +893,7 @@ public class FirstStartConfig extends javax.swing.JFrame {
         } catch (Exception ex) {
         }
         setVisible(false);
-        System.out.println("[ESYS-INFO] Carregando Splash Em Modo Metal");
+        System.out.println("[XLIV-INFO] Carregando Splash Em Modo Metal");
         new SplashScreen().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnSaveLoadActionPerformed
@@ -1067,7 +1067,7 @@ public class FirstStartConfig extends javax.swing.JFrame {
             cb.setDatabaseDriver("com.mysql.jdbc.Driver");
             cb.setDatabaseType("mysql");
             cb.setDbData(new String[]{tfDBUser.getText(), new String(tfDBPass.getPassword()), tfDBHost.getText(), tfDBPort.getText()});
-        } else if (rbtnMysql.isSelected()) {
+        } else if (rbtnSqlite.isSelected()) {
             cb.setDatabaseDriver("org.sqlite.JDBC");
             cb.setDatabaseType("sqlite");
             cb.setDbData(new String[]{"", "", "", ""});
