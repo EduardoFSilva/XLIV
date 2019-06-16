@@ -91,10 +91,11 @@ public class FirstStartConfig extends javax.swing.JFrame {
         chbDownloadIndex = new javax.swing.JCheckBox();
         chbBypassDialog = new javax.swing.JCheckBox();
         chbSysTray = new javax.swing.JCheckBox();
+        chbDashboard = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("ESYS - Configuração Inicial");
+        setTitle("Configuração Inicial");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -633,6 +634,8 @@ public class FirstStartConfig extends javax.swing.JFrame {
         chbDarkMode.setForeground(new java.awt.Color(255, 255, 255));
         chbDarkMode.setSelected(true);
         chbDarkMode.setText("Dark Mode");
+        chbDarkMode.setToolTipText("Quem Usa Light Mode Hoje Em Dia");
+        chbDarkMode.setEnabled(false);
 
         chbSaveLogin.setBackground(new java.awt.Color(0, 0, 0));
         chbSaveLogin.setFont(new java.awt.Font("Segoe UI Semibold", 0, 11)); // NOI18N
@@ -668,6 +671,12 @@ public class FirstStartConfig extends javax.swing.JFrame {
         chbSysTray.setSelected(true);
         chbSysTray.setText("Usar Icone De Bandeja");
 
+        chbDashboard.setBackground(new java.awt.Color(0, 0, 0));
+        chbDashboard.setFont(new java.awt.Font("Segoe UI Semibold", 0, 11)); // NOI18N
+        chbDashboard.setForeground(new java.awt.Color(255, 255, 255));
+        chbDashboard.setSelected(true);
+        chbDashboard.setText("Dashboard Em Fullscreen");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -680,8 +689,9 @@ public class FirstStartConfig extends javax.swing.JFrame {
                     .addComponent(chbDownloadIndex)
                     .addComponent(chbAutoLogin)
                     .addComponent(chbSaveLogin)
-                    .addComponent(chbDarkMode))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addComponent(chbDarkMode)
+                    .addComponent(chbDashboard))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -698,6 +708,8 @@ public class FirstStartConfig extends javax.swing.JFrame {
                 .addComponent(chbBypassDialog)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chbSysTray)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chbDashboard)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -724,7 +736,7 @@ public class FirstStartConfig extends javax.swing.JFrame {
                         .addGap(40, 40, 40))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel13)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(101, Short.MAX_VALUE))))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(161, 161, 161)
                 .addComponent(btnSaveLoad)
@@ -991,6 +1003,7 @@ public class FirstStartConfig extends javax.swing.JFrame {
     private javax.swing.JCheckBox chbAutoLogin;
     private javax.swing.JCheckBox chbBypassDialog;
     private javax.swing.JCheckBox chbDarkMode;
+    private javax.swing.JCheckBox chbDashboard;
     private javax.swing.JCheckBox chbDownloadIndex;
     private javax.swing.JCheckBox chbManualInput;
     private javax.swing.JCheckBox chbSaveLogin;
@@ -1080,13 +1093,14 @@ public class FirstStartConfig extends javax.swing.JFrame {
     }
 
     private boolean[] readOptions() {
-        boolean b[] = new boolean[6];
+        boolean b[] = new boolean[7];
         b[0] = chbDarkMode.isSelected();
         b[1] = chbSaveLogin.isSelected();
         b[2] = chbAutoLogin.isSelected();
         b[3] = chbDownloadIndex.isSelected();
         b[4] = chbBypassDialog.isSelected();
         b[5] = chbSysTray.isSelected();
+        b[6] = chbDashboard.isSelected();
         return b;
     }
 }

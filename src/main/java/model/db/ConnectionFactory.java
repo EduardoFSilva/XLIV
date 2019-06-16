@@ -25,7 +25,7 @@ public class ConnectionFactory {
         }
     }
 
-    private Connection createConnection() {
+    private Connection createConn() {
         String tipo = cb.getDatabaseType();
         Connection connection = null;
         try {
@@ -46,7 +46,7 @@ public class ConnectionFactory {
         return connection;
     }
 
-    private Connection createConn() {
+    private Connection createConnection() {
         String tipo = cb.getDatabaseType();
         Connection connection = null;
         try {
@@ -64,12 +64,12 @@ public class ConnectionFactory {
         return connection;
     }
 
-    public static Connection getConnection() {
-        return instance.createConnection();
-    }
-
     public static Connection getConn() {
         return instance.createConn();
+    }
+
+    public static Connection getConnection() {
+        return instance.createConnection();
     }
 
     public static void define() {

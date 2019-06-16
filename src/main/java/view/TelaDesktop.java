@@ -5,6 +5,13 @@
  */
 package view;
 
+import java.awt.Graphics;
+import javax.swing.JOptionPane;
+import model.bean.ConfigBEAN;
+import model.bean.UserBEAN;
+import util.ConfigFileFactory;
+import util.MiscUtils;
+
 /**
  *
  * @author Usuario
@@ -16,6 +23,7 @@ public class TelaDesktop extends javax.swing.JFrame {
      */
     public TelaDesktop() {
         initComponents();
+        setSize(getToolkit().getScreenSize());
     }
 
     /**
@@ -27,21 +35,179 @@ public class TelaDesktop extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnDesk = new javax.swing.JDesktopPane(){
+            public void paintComponent(Graphics g){
+                super.paintComponent(g);
+                g.drawImage(new MiscUtils().getWallpaperImage(), 0, 0,this.getWidth(),this.getHeight(), this);
+            }
+        };
+        menuBarra = new javax.swing.JMenuBar();
+        mnLogin = new javax.swing.JMenu();
+        imenuDisconnect = new javax.swing.JMenuItem();
+        menuSair = new javax.swing.JMenu();
+        imenuQuitAndSave = new javax.swing.JMenuItem();
+        imenuQuit = new javax.swing.JMenuItem();
+        mnOpcoes = new javax.swing.JMenu();
+        imenuWallpaper = new javax.swing.JMenuItem();
+        imenuConfig = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
+
+        pnDesk.setBackground(new java.awt.Color(0, 102, 102));
+        pnDesk.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                pnDeskMouseMoved(evt);
+            }
+        });
+        pnDesk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnDeskMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnDeskLayout = new javax.swing.GroupLayout(pnDesk);
+        pnDesk.setLayout(pnDeskLayout);
+        pnDeskLayout.setHorizontalGroup(
+            pnDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 532, Short.MAX_VALUE)
+        );
+        pnDeskLayout.setVerticalGroup(
+            pnDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 353, Short.MAX_VALUE)
+        );
+
+        mnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/login.png"))); // NOI18N
+        mnLogin.setText("Login");
+
+        imenuDisconnect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/logout.png"))); // NOI18N
+        imenuDisconnect.setText("Desconectar");
+        imenuDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imenuDisconnectActionPerformed(evt);
+            }
+        });
+        mnLogin.add(imenuDisconnect);
+
+        menuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/power.png"))); // NOI18N
+        menuSair.setText("Sair");
+
+        imenuQuitAndSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/login.png"))); // NOI18N
+        imenuQuitAndSave.setText("Sair E Salvar");
+        imenuQuitAndSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imenuQuitAndSaveActionPerformed(evt);
+            }
+        });
+        menuSair.add(imenuQuitAndSave);
+
+        imenuQuit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/login.png"))); // NOI18N
+        imenuQuit.setText("Sair Sem Salvar");
+        imenuQuit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imenuQuitActionPerformed(evt);
+            }
+        });
+        menuSair.add(imenuQuit);
+
+        mnLogin.add(menuSair);
+
+        menuBarra.add(mnLogin);
+
+        mnOpcoes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/cogwheel.png"))); // NOI18N
+        mnOpcoes.setText("Opções");
+
+        imenuWallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/image.png"))); // NOI18N
+        imenuWallpaper.setText("Alterar Wallpaper");
+        mnOpcoes.add(imenuWallpaper);
+
+        imenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/settings-work-tool.png"))); // NOI18N
+        imenuConfig.setText("Configurações Gerais");
+        mnOpcoes.add(imenuConfig);
+
+        menuBarra.add(mnOpcoes);
+
+        setJMenuBar(menuBarra);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(pnDesk)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(pnDesk)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void pnDeskMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDeskMouseClicked
+
+    }//GEN-LAST:event_pnDeskMouseClicked
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
+
+    }//GEN-LAST:event_formMouseMoved
+
+    private void pnDeskMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDeskMouseMoved
+
+    }//GEN-LAST:event_pnDeskMouseMoved
+
+    private void imenuDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuDisconnectActionPerformed
+        ConfigBEAN cb = new ConfigFileFactory().readFile();
+        if (exitConfirm(cb.getOptions()[4])) {
+            System.out.println("[XLIV-INFO] Desconectando...");
+            System.out.println("[XLIV-INFO] Abrindo Tela De Login No Modo 0");
+            setVisible(false);
+            new LoginScreen(0);
+            dispose();
+        }
+    }//GEN-LAST:event_imenuDisconnectActionPerformed
+
+    private void imenuQuitAndSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuQuitAndSaveActionPerformed
+        System.out.println("[XLIV-INFO] Obtendo Dados...");
+        ConfigBEAN cb = new ConfigFileFactory().readFile();
+        if (exitConfirm(cb.getOptions()[4])) {
+
+            boolean[] opcs = cb.getOptions();
+            if (opcs[2]) {
+                System.out.println("[XLIV-INFO] Login Automatico Ativado...");
+                System.out.println("[XLIV-INFO] Saindo...");
+            } else {
+                System.out.println("[XLIV-INFO] Gravando Credenciais Para Proximo Login...");
+                opcs[1] = true;
+                opcs[2] = false;
+                System.out.println("[XLIV-INFO] Saindo...");
+                cb.setOptions(opcs);
+            }
+            new ConfigFileFactory().writeFile(cb);
+            System.exit(0);
+        }
+    }//GEN-LAST:event_imenuQuitAndSaveActionPerformed
+
+    private void imenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuQuitActionPerformed
+        System.out.println("[XLIV-INFO] Obtendo Dados...");
+        ConfigBEAN cb = new ConfigFileFactory().readFile();
+        if (exitConfirm(cb.getOptions()[4])) {
+            boolean[] opcs = cb.getOptions();
+            opcs[1] = false;
+            opcs[2] = false;
+            System.out.println("[XLIV-INFO] Apagando Credenciais De Login...");
+            cb.setOptions(opcs);
+            UserBEAN ub = new UserBEAN().init();
+            cb.setSavedUser(ub);
+            System.out.println("[XLIV-INFO] Saindo...");
+            new ConfigFileFactory().writeFile(cb);
+            System.exit(0);
+        }
+    }//GEN-LAST:event_imenuQuitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -79,5 +245,29 @@ public class TelaDesktop extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem imenuConfig;
+    private javax.swing.JMenuItem imenuDisconnect;
+    private javax.swing.JMenuItem imenuQuit;
+    private javax.swing.JMenuItem imenuQuitAndSave;
+    private javax.swing.JMenuItem imenuWallpaper;
+    private javax.swing.JMenuBar menuBarra;
+    private javax.swing.JMenu menuSair;
+    private javax.swing.JMenu mnLogin;
+    private javax.swing.JMenu mnOpcoes;
+    private javax.swing.JDesktopPane pnDesk;
     // End of variables declaration//GEN-END:variables
+
+    private boolean exitConfirm(boolean b) {
+        if (b) {
+            return true;
+        } else {
+            int value = JOptionPane.showInternalConfirmDialog(pnDesk, "Deseja Sair ?", "Saindo...", JOptionPane.WARNING_MESSAGE);
+            switch (value) {
+                case JOptionPane.YES_OPTION:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
 }

@@ -9,15 +9,18 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import model.bean.ConfigBEAN;
 import util.ConfigFileFactory;
 import util.ConnectionVerifyer;
 import util.InitHelper;
+import util.LoginMiddleware;
 
 public class SplashScreen extends javax.swing.JFrame {
 
@@ -43,6 +46,7 @@ public class SplashScreen extends javax.swing.JFrame {
                             if (etapaDatabase()) {
                                 changeIcon("database", "success", lbDatabase);
                                 verbose("Carregamento Concluido. Iniciando Login Middleware", false);
+                                initMiddleware();
                             }
                         }
                     }
@@ -78,7 +82,8 @@ public class SplashScreen extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         tfInfo = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("XLIV System - Loading...");
         setUndecorated(true);
 
         pnBg.setBackground(new java.awt.Color(0, 0, 0));
@@ -252,12 +257,18 @@ public class SplashScreen extends javax.swing.JFrame {
     }
 
     private void initFonts() {
-        try {
+        /*try {
             nasalization = Font.createFont(Font.TRUETYPE_FONT, new File(getClass().getResource("/fonts/nasalization-rg.ttf").toURI())).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(nasalization);
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+        try {
+            InputStream is = getClass().getResourceAsStream("/fonts/nasalization-rg.ttf");
+            Font f = Font.createFont(Font.TRUETYPE_FONT, is);
+            nasalization = f.deriveFont(14f);
+        } catch (Exception ex) {
         }
     }
 
@@ -267,27 +278,27 @@ public class SplashScreen extends javax.swing.JFrame {
     }
 
     private boolean etapaStorage() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("local-storage", "running", lbLocalStorage);
         verbose("Verificando Permissões De Escrita", false);
         if (InitHelper.isWritable()) {
-            Thread.sleep(200);
+            Thread.sleep(getDelay(0.2f));
             verbose("Permissão De Escrita Liberada", false);
-            Thread.sleep(200);
+            Thread.sleep(getDelay(0.2f));
             verbose("Verificando Presença De Pastas", false);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             if (!InitHelper.hasDataFolder()) {
                 verbose("Pasta Não Existe. Criando...", false);
-                Thread.sleep(200);
+                Thread.sleep(getDelay(0.2f));
                 if (InitHelper.createDataFolder()) {
                     verbose("Pasta Criada Com Sucesso.", false);
-                    Thread.sleep(500);
+                    Thread.sleep(getDelay(0.5f));
                     verbose("Etapa De Storage Finalizada Com Sucesso.", false);
                     changeIcon("local-storage", "success", lbLocalStorage);
                     return true;
                 } else {
                     verbose("Falha Ao Criar Pasta", true);
-                    Thread.sleep(500);
+                    Thread.sleep(getDelay(0.5f));
                     verbose("Etapa De Storage Finalizada Com Errors.", true);
                     changeIcon("local-storage", "error", lbLocalStorage);
                     getToolkit().beep();
@@ -295,7 +306,7 @@ public class SplashScreen extends javax.swing.JFrame {
                 }
             } else {
                 verbose("Pasta Encontrada.", false);
-                Thread.sleep(200);
+                Thread.sleep(getDelay(0.2f));
                 verbose("Etapa De Storage Finalizada Com Sucesso.", false);
                 changeIcon("local-storage", "success", lbLocalStorage);
                 return true;
@@ -309,17 +320,17 @@ public class SplashScreen extends javax.swing.JFrame {
     }
 
     private boolean etapaBinFile() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("binary-file", "running", lbBinFile);
         verbose("Verificando Binário De Configurações", false);
-        Thread.sleep(500);
+        Thread.sleep(getDelay(0.5f));
         if (InitHelper.binFileExists()) {
             float f = InitHelper.fileVersionIsTheSame();
             if (f == 0) {
                 verbose("Arquivo Binário Está Atualizado", false);
-                Thread.sleep(500);
+                Thread.sleep(getDelay(0.5f));
                 changeIcon("binary-file", "success", lbBinFile);
-                Thread.sleep(500);
+                Thread.sleep(getDelay(0.5f));
                 verbose("Etapa De Arquivo Binário Finalizada Com Sucesso.", false);
                 return true;
             } else {
@@ -328,7 +339,7 @@ public class SplashScreen extends javax.swing.JFrame {
                 switch (i) {
                     case JOptionPane.YES_OPTION:
                         verbose("Migrando...", false);
-                        Thread.sleep(1000);
+                        Thread.sleep(getDelay(1f));
                         InitHelper.deleteBinFile();
                         new FirstStartConfig().setVisible(true);
                         dispose();
@@ -336,40 +347,40 @@ public class SplashScreen extends javax.swing.JFrame {
                     case JOptionPane.NO_OPTION:
                     default:
                         verbose("Pulando Migração De Arquivo Binário", true);
-                        Thread.sleep(500);
+                        Thread.sleep(getDelay(0.5f));
                         break;
                 }
-                Thread.sleep(1000);
+                Thread.sleep(getDelay(1f));
                 return true;
             }
         } else {
             verbose("Arquivo Binário De Configuração Não Encontrado", true);
             changeIcon("binary-file", "error", lbBinFile);
             getToolkit().beep();
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Arquivo Binário Finalizada Com Errors.", true);
             return false;
         }
     }
 
     private boolean etapaNetwork() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("network", "running", lbNetwork);
         verbose("Verificando Conexão A Internet", false);
         if (new ConnectionVerifyer().isConnected()) {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Rede Conectada", false);
             changeIcon("network", "success", lbNetwork);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Rede Finalizada Com Sucesso.", false);
             return true;
         } else {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Rede Desconectada", true);
             changeIcon("network", "error", lbNetwork);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Rede Finalizada Com Sucesso.", true);
-            Thread.sleep(1000);
+            Thread.sleep(getDelay(1f));
             verbose("Pulando Verificação De Repositório Github", true);
             changeIcon("github", "error", lbGithub);
             verbose("Pulando Verificação De Arquivo De Indice", true);
@@ -379,51 +390,51 @@ public class SplashScreen extends javax.swing.JFrame {
     }
 
     private boolean etapaGithub() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("github", "running", lbGithub);
         verbose("Verificando Conexão Ao Repositório Git", false);
         if (new ConnectionVerifyer().isRearchble("https://github.com/EduardoFSilva/XLIV")) {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Conexão Ao Repositório Bem Sucedida", false);
             changeIcon("github", "success", lbGithub);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Repositório Github Finalizada Com Sucesso.", false);
             return true;
         } else {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Falha Ao Conectar Ao Repositório", true);
             changeIcon("github", "error", lbGithub);
             getToolkit().beep();
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Repositório Github Finalizada Com Erros.", true);
             return false;
         }
     }
 
     private boolean etapaIndexFile() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("index-file", "running", lbIndexFile);
         verbose("Verificando Existencia De Arquivo De Indice", false);
         if (new ConnectionVerifyer().isRearchble("https://raw.githubusercontent.com/EduardoFSilva/XLIV/master/files/indice")) {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Arquivo De Indice Encontrado", false);
             changeIcon("index-file", "success", lbIndexFile);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Arquivo De Indice Finalizada Com Sucesso.", false);
             return true;
         } else {
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Arquivo De Indice Não Encontrado", true);
             changeIcon("index-file", "error", lbIndexFile);
             getToolkit().beep();
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Arquivo De Indice Finalizada Com Erros.", true);
             return false;
         }
     }
 
     private boolean etapaDatabase() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(getDelay(1f));
         changeIcon("database", "running", lbDatabase);
         if (InitHelper.databaseExists()) {
             if (InitHelper.getDatabaseVersion() < InitHelper.DATABASE_VERSION) {
@@ -442,20 +453,20 @@ public class SplashScreen extends javax.swing.JFrame {
                         }
                         verbose("Migração Concluida.", false);
                         changeIcon("database", "success", lbDatabase);
-                        Thread.sleep(500);
+                        Thread.sleep(getDelay(0.5f));
                         break;
                     case JOptionPane.NO_OPTION:
                     default:
                         verbose("Pulando Migração De Database", true);
                         changeIcon("database", "success", lbDatabase);
-                        Thread.sleep(500);
+                        Thread.sleep(getDelay(0.5f));
                         break;
                 }
             }
             return true;
         } else {
             verbose("Database Não Encontrada. Criando...", false);
-            Thread.sleep(200);
+            Thread.sleep(getDelay(0.2f));
             try {
                 InitHelper.generateDatabase();
             } catch (Exception ex) {
@@ -464,12 +475,19 @@ public class SplashScreen extends javax.swing.JFrame {
                 return false;
             }
             verbose("Database Criada", false);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             verbose("Etapa De Database Com Sucesso.", false);
-            Thread.sleep(500);
+            Thread.sleep(getDelay(0.5f));
             changeIcon("database", "success", lbDatabase);
             return true;
         }
+    }
+
+    private void initMiddleware() throws Exception {
+        Thread.sleep(1000);
+        new LoginMiddleware().login();
+        setVisible(false);
+        dispose();
     }
 
     private void verbose(String msg, boolean isError) {
@@ -484,5 +502,10 @@ public class SplashScreen extends javax.swing.JFrame {
             tfInfo.setForeground(c1);
             tfInfo.setText(msg);
         }
+    }
+
+    private int getDelay(float multiplyer) {
+        int base = 400;
+        return (int) multiplyer * base;
     }
 }

@@ -15,6 +15,10 @@ public class ConfigBEAN implements java.io.Serializable{
     private boolean options[];
     private Color colors[];
     private float version;
+    private UserBEAN savedUser;
+    private String wallpaperLocation;
+    private String wallpaperFilePath;
+    
     public static final float VERSION = 1.1f;
     public static final Color[] DARK_MODE_PALETTE = new Color[]{new Color(0xFFFFFF),new Color(0x000000),new Color(0,0,102),new Color(51,51,51)};
     public static final Color[] LIGHT_MODE_PALETTE = new Color[]{new Color(0x000000),new Color(0xFFFFFF),new Color(0,0,200),new Color(255,255,255)};
@@ -31,10 +35,13 @@ public class ConfigBEAN implements java.io.Serializable{
     this.databaseType = "mysql";
     this.databaseDriver="com.mysql.jdbc.Driver";
     this.dbData = new String[]{"root","root","127.0.0.1","3307"};
-    this.options = new boolean[]{true,false,false,true,false,true};
+    this.options = new boolean[]{true,false,false,true,false,true,true};
     //FG, BG, Realce, Text BG;
     this.colors = new Color[]{new Color(0xFFFFFF),new Color(51, 51, 51),new Color(0,0,102),new Color(102,102,102)};
-        return this;
+    this.savedUser = new UserBEAN().init();
+    this.wallpaperFilePath = "XLIVDark3D.png";
+    this.wallpaperLocation = "internal";
+    return this;
     }
 
     public String getDatabaseType() {
@@ -80,5 +87,35 @@ public class ConfigBEAN implements java.io.Serializable{
     public float getVersion() {
         return version;
     }
+
+    public void setVersion(float version) {
+        this.version = version;
+    }
+
+    public UserBEAN getSavedUser() {
+        return savedUser;
+    }
+
+    public void setSavedUser(UserBEAN savedUser) {
+        this.savedUser = savedUser;
+    }
+
+    public String getWallpaperLocation() {
+        return wallpaperLocation;
+    }
+
+    public void setWallpaperLocation(String wallpaperLocation) {
+        this.wallpaperLocation = wallpaperLocation;
+    }
+
+    public String getWallpaperFilePath() {
+        return wallpaperFilePath;
+    }
+
+    public void setWallpaperFilePath(String wallpaperFilePath) {
+        this.wallpaperFilePath = wallpaperFilePath;
+    }
+
+  
     
 }

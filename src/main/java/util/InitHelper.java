@@ -43,7 +43,7 @@ public class InitHelper {
     public static boolean databaseExists() throws Exception {
         String db = new ConfigFileFactory().readFile().getDatabaseType();
         if (db.equals("mysql")) {
-            ResultSet rs = ConnectionFactory.getConnection().prepareCall("show databases").executeQuery();
+            ResultSet rs = ConnectionFactory.getConn().prepareCall("show databases").executeQuery();
             while (rs.next()) {
                 if (rs.getString(1).equals(ConnectionFactory.DB_NAME)) {
                     return true;
@@ -57,7 +57,7 @@ public class InitHelper {
     }
 
     public static boolean generateDatabase() throws Exception {
-        Connection conn = ConnectionFactory.getConnection();
+        Connection conn = ConnectionFactory.getConn();
         String db = new ConfigFileFactory().readFile().getDatabaseType();
         String sql = "";
         File f = null;
@@ -78,6 +78,7 @@ public class InitHelper {
             st.execute("use xliv");
             st.execute("create table user(\n"
                     + "id int not null primary key auto_increment,\n"
+                    + "nick varchar(50) not null,\n"
                     + "name varchar(100) null,\n"
                     + "role varchar(10) null,\n"
                     + "email varchar(100) null,\n"
@@ -100,6 +101,7 @@ public class InitHelper {
         try {
             st.execute("create table user(\n"
                     + "id INTEGER PRIMARY KEY autoincrement,\n"
+                    + "nick varchar(50) not null,\n"
                     + "name varchar(100) null,\n"
                     + "role varchar(10) null,\n"
                     + "email varchar(100) null,\n"
@@ -122,17 +124,17 @@ public class InitHelper {
     }
 
     public static float getDatabaseVersion() throws Exception {
-        Connection c = ConnectionFactory.getConn();
+        Connection c = ConnectionFactory.getConnection();
         PreparedStatement ps = c.prepareStatement("select version from properties where id = 1");
         ResultSet rs = ps.executeQuery();
-        if(rs.next()){
-        return Float.valueOf(rs.getString(1));
+        if (rs.next()) {
+            return Float.valueOf(rs.getString(1));
         }
         return DATABASE_VERSION;
     }
 
     public static void dropDatabase() throws Exception {
-        Connection c = ConnectionFactory.getConn();
+        Connection c = ConnectionFactory.getConnection();
         String db = new ConfigFileFactory().readFile().getDatabaseType();
         if (db.equals("mysql")) {
             PreparedStatement ps = c.prepareStatement("drop database xliv;");
