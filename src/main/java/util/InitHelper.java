@@ -22,11 +22,19 @@ public class InitHelper {
 
     public static boolean hasDataFolder() {
         File f = new File(ConfigFileFactory.PATH + File.separator + "Data");
+        File f2 = new File(f.getAbsolutePath() + File.separator + "Wallpaper");
+        if (f.exists()) {
+            if (!f2.exists()) {
+                f2.mkdir();
+            }
+        }
         return f.exists();
     }
 
     public static boolean createDataFolder() {
         File f = new File(ConfigFileFactory.PATH + File.separator + "Data");
+        File f2 = new File(f.getAbsolutePath() + File.pathSeparator + "Wallpaper");
+        f2.mkdir();
         return f.mkdir();
     }
 

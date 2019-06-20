@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import model.bean.ConfigBEAN;
 
 public class MiscUtils {
 
+    public static final String DATA_WALLPAPER_FOLDER = "Data" + File.separator + "Wallpaper";
     public Image getWallpaperImage() {
         ConfigBEAN cb = new ConfigFileFactory().readFile();
         String loc = cb.getWallpaperLocation();
@@ -26,7 +28,7 @@ public class MiscUtils {
             } catch (IOException ex) {
             }
         } else if (loc.equals("data-folder")) {
-            File f = new File(ConfigFileFactory.PATH + File.separator + "Data" + File.separator + cb.getWallpaperLocation());
+            File f = new File(ConfigFileFactory.PATH + File.separator + DATA_WALLPAPER_FOLDER +File.separator+ cb.getWallpaperFilePath());
             if (f.exists()) {
                 try {
                     img = ImageIO.read(f.getAbsoluteFile());
@@ -65,4 +67,48 @@ public class MiscUtils {
         return img;
     }
 
+    public File[] listImagesFrom(String location, String path) {
+        String[] exts = {".bmp", ".png", ".jpg", ".gif", ".jfif"};
+        File[] imgs = new File[0];
+        if (location.equals("internal")) {
+            File f = new File(getClass().getResource("/images/wallpapers/").getPath());
+            imgs = f.listFiles();
+        } else if (location.equals("data-folder")) {
+            File f = new File(ConfigFileFactory.PATH + File.separator + "Data" + File.separator + "Wallpaper");
+            imgs = f.listFiles();
+        } else if (location.equals("external")) {
+            File f = new File(path);
+            imgs = f.listFiles();
+        }
+        ArrayList<File> arr = new ArrayList<>();
+        for (File img : imgs) {
+            for (String ext : exts) {
+                if (img.getName().toLowerCase().endsWith(ext)) {
+                    arr.add(img);
+                }
+            }
+        }
+        File[] filt = new File[arr.size()];
+        for (int i = 0; i < filt.length; i++) {
+            filt[i] = arr.get(i);
+        }
+        imgs = filt;
+        return imgs;
+    }
+
+    public BufferedImage[] getImagesFrom(String location, String path) {
+        File[] imgfiles = this.listImagesFrom(location, path);
+        if (imgfiles == null) {
+            return null;
+        } else {
+            BufferedImage[] img = new BufferedImage[imgfiles.length];
+            for (int i = 0; i < imgfiles.length; i++) {
+                try {
+                    img[i] = ImageIO.read(imgfiles[i].getAbsoluteFile());
+                } catch (IOException ex) {
+                }
+            }
+            return img;
+        }
+    }
 }

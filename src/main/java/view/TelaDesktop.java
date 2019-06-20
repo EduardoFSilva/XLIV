@@ -6,11 +6,15 @@
 package view;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import model.bean.ConfigBEAN;
 import model.bean.UserBEAN;
 import util.ConfigFileFactory;
 import util.MiscUtils;
+import view.internals.TelaConfig;
+import view.internals.TelaWallpaper;
 
 /**
  *
@@ -18,12 +22,21 @@ import util.MiscUtils;
  */
 public class TelaDesktop extends javax.swing.JFrame {
 
+    private Image imgWallpaper = new MiscUtils().getWallpaperImage();
+    private TelaWallpaper telawallpaper = null;
+    private TelaConfig telaconfig = null;
+
     /**
      * Creates new form TelaDesktop
      */
     public TelaDesktop() {
         initComponents();
-        setSize(getToolkit().getScreenSize());
+        if (new ConfigFileFactory().readFile().getOptions()[6]) {
+            setSize(getToolkit().getScreenSize());
+        } else {
+            String user = new ConfigFileFactory().readFile().getSavedUser().getNick();
+            setTitle(String.format("XLIV Dashboard - %s", user));
+        }
     }
 
     /**
@@ -38,7 +51,7 @@ public class TelaDesktop extends javax.swing.JFrame {
         pnDesk = new javax.swing.JDesktopPane(){
             public void paintComponent(Graphics g){
                 super.paintComponent(g);
-                g.drawImage(new MiscUtils().getWallpaperImage(), 0, 0,this.getWidth(),this.getHeight(), this);
+                g.drawImage(imgWallpaper, 0, 0,this.getWidth(),this.getHeight(), this);
             }
         };
         menuBarra = new javax.swing.JMenuBar();
@@ -52,34 +65,21 @@ public class TelaDesktop extends javax.swing.JFrame {
         imenuConfig = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
-        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                formMouseMoved(evt);
-            }
-        });
+        setTitle("XLIV - Dashboard - Username");
+        setUndecorated((new ConfigFileFactory().readFile().getOptions()[6]));
+        setPreferredSize(new java.awt.Dimension(800, 450));
 
         pnDesk.setBackground(new java.awt.Color(0, 102, 102));
-        pnDesk.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                pnDeskMouseMoved(evt);
-            }
-        });
-        pnDesk.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnDeskMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnDeskLayout = new javax.swing.GroupLayout(pnDesk);
         pnDesk.setLayout(pnDeskLayout);
         pnDeskLayout.setHorizontalGroup(
             pnDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 799, Short.MAX_VALUE)
         );
         pnDeskLayout.setVerticalGroup(
             pnDeskLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
 
         mnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/login.png"))); // NOI18N
@@ -124,10 +124,20 @@ public class TelaDesktop extends javax.swing.JFrame {
 
         imenuWallpaper.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/image.png"))); // NOI18N
         imenuWallpaper.setText("Alterar Wallpaper");
+        imenuWallpaper.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imenuWallpaperActionPerformed(evt);
+            }
+        });
         mnOpcoes.add(imenuWallpaper);
 
         imenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/16x/settings-work-tool.png"))); // NOI18N
         imenuConfig.setText("Configurações Gerais");
+        imenuConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imenuConfigActionPerformed(evt);
+            }
+        });
         mnOpcoes.add(imenuConfig);
 
         menuBarra.add(mnOpcoes);
@@ -147,18 +157,6 @@ public class TelaDesktop extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void pnDeskMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDeskMouseClicked
-
-    }//GEN-LAST:event_pnDeskMouseClicked
-
-    private void formMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseMoved
-
-    }//GEN-LAST:event_formMouseMoved
-
-    private void pnDeskMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDeskMouseMoved
-
-    }//GEN-LAST:event_pnDeskMouseMoved
 
     private void imenuDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuDisconnectActionPerformed
         ConfigBEAN cb = new ConfigFileFactory().readFile();
@@ -208,6 +206,36 @@ public class TelaDesktop extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_imenuQuitActionPerformed
+
+    private void imenuWallpaperActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuWallpaperActionPerformed
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (telawallpaper == null) {
+                    telawallpaper = new TelaWallpaper();
+                }
+                if (!isInDesktopPane(telawallpaper)) {
+                    pnDesk.add(telawallpaper);
+                    telawallpaper.setVisible(true);
+                }
+            }
+        }, "Thread de Inicialização De Janela De Wallpaper").start();
+    }//GEN-LAST:event_imenuWallpaperActionPerformed
+
+    private void imenuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuConfigActionPerformed
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (telaconfig == null) {
+                    telaconfig = new TelaConfig();
+                }
+                if (!isInDesktopPane(telaconfig)) {
+                    pnDesk.add(telaconfig);
+                    telaconfig.setVisible(true);
+                }
+            }
+        }, "Thread de Inicialização De Janela De Opções").start();
+    }//GEN-LAST:event_imenuConfigActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,5 +297,16 @@ public class TelaDesktop extends javax.swing.JFrame {
                     return false;
             }
         }
+    }
+
+    private boolean isInDesktopPane(JInternalFrame child) {
+        boolean flag = false;
+        JInternalFrame[] jintframes = pnDesk.getAllFrames();
+        for (JInternalFrame jInternalFrame : jintframes) {
+            if (jInternalFrame.equals(child)) {
+                return true;
+            }
+        }
+        return flag;
     }
 }
