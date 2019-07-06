@@ -33,7 +33,7 @@ public class InitHelper {
 
     public static boolean createDataFolder() {
         File f = new File(ConfigFileFactory.PATH + File.separator + "Data");
-        File f2 = new File(f.getAbsolutePath() + File.pathSeparator + "Wallpaper");
+        File f2 = new File(f.getAbsolutePath() + File.separator + "Wallpaper");
         f2.mkdir();
         return f.mkdir();
     }

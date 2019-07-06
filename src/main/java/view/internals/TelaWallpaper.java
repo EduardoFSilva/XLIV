@@ -8,13 +8,14 @@ package view.internals;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import model.bean.ConfigBEAN;
 import util.ConfigFileFactory;
-import util.MiscUtils;
+import util.ImageUtils;
 
 /**
  *
@@ -31,7 +32,7 @@ public class TelaWallpaper extends javax.swing.JInternalFrame {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                imgs = new MiscUtils().getImagesFrom("internal", actualPath);
+                imgs = new ImageUtils().getImagesFrom("data-folder", actualPath);
                 preencherLista(actualPath);
                 barra.setIndeterminate(false);
             }
@@ -103,7 +104,7 @@ public class TelaWallpaper extends javax.swing.JInternalFrame {
 
         cbLoc.setBackground(new java.awt.Color(51, 51, 51));
         cbLoc.setForeground(new java.awt.Color(255, 255, 255));
-        cbLoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Interna", "Dados", "Externa" }));
+        cbLoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "Dados", "Externa" }));
         cbLoc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbLocActionPerformed(evt);
@@ -141,11 +142,9 @@ public class TelaWallpaper extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(tfPath, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(btnSelectPath)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tfPath, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSelectPath, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(5, 5, 5))
         );
         jPanel2Layout.setVerticalGroup(
@@ -418,8 +417,12 @@ private void preencherLista(String local) {
                 break;
         }
         if (cbLoc.getSelectedIndex() != 2) {
-            File[] imgs = new MiscUtils().listImagesFrom(loc, local);
-            BufferedImage imgb[] = new MiscUtils().getImagesFrom(loc, local);
+            File[] imgs = null;
+            try {
+                imgs = new ImageUtils().listImagesFrom(loc, local);
+            } catch (IOException ex) {
+            }
+            BufferedImage imgb[] = new ImageUtils().getImagesFrom(loc, local);
             this.imgs = imgb;
             for (File img : imgs) {
                 model.addElement(img.getName());

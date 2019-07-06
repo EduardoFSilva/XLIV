@@ -39,7 +39,7 @@ public class ConfigBEAN implements java.io.Serializable{
     //FG, BG, Realce, Text BG;
     this.colors = new Color[]{new Color(0xFFFFFF),new Color(51, 51, 51),new Color(0,0,102),new Color(102,102,102)};
     this.savedUser = new UserBEAN().init();
-    this.wallpaperFilePath = "XLIVDark3D.png";
+    this.wallpaperFilePath = "XLIVLight3D.png";
     this.wallpaperLocation = "internal";
     return this;
     }

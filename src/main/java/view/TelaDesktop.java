@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import model.bean.ConfigBEAN;
 import model.bean.UserBEAN;
 import util.ConfigFileFactory;
-import util.MiscUtils;
+import util.ImageUtils;
 import view.internals.TelaConfig;
 import view.internals.TelaWallpaper;
 
@@ -22,7 +22,7 @@ import view.internals.TelaWallpaper;
  */
 public class TelaDesktop extends javax.swing.JFrame {
 
-    private Image imgWallpaper = new MiscUtils().getWallpaperImage();
+    private Image imgWallpaper = new ImageUtils().getWallpaperImage();
     private TelaWallpaper telawallpaper = null;
     private TelaConfig telaconfig = null;
 
